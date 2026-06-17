@@ -1,0 +1,52 @@
+schema_version: 1
+
+context:
+  name: fcgi2
+  version: "2.4.7"
+
+package:
+  name: ${{ name|lower }}
+  version: ${{ version }}
+
+source:
+  url: https://github.com/FastCGI-Archives/fcgi2/archive/refs/tags/${{ version }}.tar.gz
+  sha256: e41ddc3a473b555bdc0cbd80703dcb1f4610c1a7700d3b9d3d0c14a416e1074b
+
+build:
+  number: 1
+
+requirements:
+  build:
+    - ${{ compiler('cxx') }}
+    - ${{ stdlib('c') }}
+    - if: unix
+      then: autoconf
+    - if: unix
+      then: libtool
+    - if: unix
+      then: automake
+    - if: unix
+      then: make
+    - if: unix
+      then: gnuconfig
+
+tests:
+  - script:
+      - if: not win
+        then: test -f ${PREFIX}/lib/libfcgi${SHLIB_EXT}
+
+about:
+  summary: FastCGI implementation
+  description: |
+    FastCGI Developers Kit
+  license: BSD-3-Clause
+  license_file: LICENSE
+  # The doc_url and dev_url are optional.
+  homepage: https://github.com/FastCGI-Archives/fcgi2
+  repository: https://github.com/FastCGI-Archives/fcgi2/releases
+  documentation: https://github.com/FastCGI-Archives/fcgi2/
+
+extra:
+  recipe-maintainers:
+    - hobu
+
